@@ -1,5 +1,7 @@
-import { Knex } from "knex";
 import hashPassword from "../utils/hashPassword";
+
+import { Knex } from "knex";
+import { User } from "../types/entities/Users";
 
 class UserService {
   db: Knex;
@@ -8,7 +10,7 @@ class UserService {
     this.db = databaseConnection;
   }
 
-  async create(userObj: any) {
+  async create(userObj: User) {
     if (!userObj.name) throw new Error("Missing name");
 
     if (!userObj.email) throw new Error("Missing email");
