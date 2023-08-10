@@ -1,0 +1,8 @@
+user service:
+    [x] - enable auto reload after code changes;
+    [] - register user
+        [x] - create a hash password function;
+        [x] - check why knex config isn't working with sqlite3 but is working with pg;
+        [] - check why jest .toThrow() method isn't catching the errors properly;
+        [] - create a user service;
+    [] - login user
