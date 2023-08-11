@@ -2,10 +2,10 @@ import "dotenv/config";
 import express from "express";
 import routes from "./routes";
 
-const app = express();
+const server = express();
 
-app.use(routes);
+server.use(express.json());
 
-app.listen(process.env.APP_PORT, () => {
-  console.log("Server listening on port:", process.env.APP_PORT);
-});
+server.use(routes);
+
+export default server;

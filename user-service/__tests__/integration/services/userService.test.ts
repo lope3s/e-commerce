@@ -25,7 +25,7 @@ describe("Testing UserService", () => {
 
   describe("Testing create method", () => {
     it("Should return an error is no name is provided", () => {
-      const userObj = {
+      const userObj: any = {
         email: "test@mail.com",
         password: "test1234",
       };
@@ -36,7 +36,7 @@ describe("Testing UserService", () => {
     });
 
     it("Should return an error is no email is provided", async () => {
-      const userObj = {
+      const userObj: any = {
         name: "lopes",
         password: "test1234",
       };
@@ -47,7 +47,7 @@ describe("Testing UserService", () => {
     });
 
     it("Should return an error is no password is provided", async () => {
-      const userObj = {
+      const userObj: any = {
         name: "lopes",
         email: "test@mail.com",
       };

@@ -2,6 +2,7 @@ import hashPassword from "../utils/hashPassword";
 
 import { Knex } from "knex";
 import { User } from "../types/entities/Users";
+import UserServiceError from "../types/errors/UserService";
 
 class UserService {
   db: Knex;
@@ -11,11 +12,11 @@ class UserService {
   }
 
   async create(userObj: User) {
-    if (!userObj.name) throw new Error("Missing name");
+    if (!userObj.name) throw new UserServiceError("Missing name");
 
-    if (!userObj.email) throw new Error("Missing email");
+    if (!userObj.email) throw new UserServiceError("Missing email");
 
-    if (!userObj.password) throw new Error("Missing password");
+    if (!userObj.password) throw new UserServiceError("Missing password");
 
     const hashedPassword = hashPassword(userObj.password);
 

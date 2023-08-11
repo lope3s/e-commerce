@@ -1,4 +1,5 @@
 import knex from "knex";
+import * as knexConfig from "../../knexfile.ts";
 
 const env = process.env;
 
@@ -7,16 +8,10 @@ if (!env["DATABASE_PORT"]) {
   process.exit(1);
 }
 
-const db = knex({
-  client: "pg",
-  connection: {
-    host: env["DATABASE_HOST"],
-    port: parseInt(env["DATABASE_PORT"]),
-    user: env["DATABASE_USER"],
-    database: env["DATABASE_DB"],
-    password: env["DATABASE_PASSWORD"],
-    debug: true,
-  },
-});
+const nodeEnv = env["NODE_ENV"];
+
+const config = nodeEnv ? nodeEnv : "development";
+
+const db = knex((knexConfig as any)[config]);
 
 export default db;
