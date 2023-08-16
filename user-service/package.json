@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx jest ./__tests__ --watch",
     "start": "npx nodemon ./src/index.ts",
+    "test": "export NODE_ENV=test && npx jest ./__tests__ --watch",
     "test:integration": "export NODE_ENV=test && npx jest ./__tests__/integration --watch",
     "test:unit": "npx jest ./__tests__/unit/ --watch"
   },

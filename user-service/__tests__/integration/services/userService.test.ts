@@ -64,9 +64,9 @@ describe("Testing UserService", () => {
         password: "test1234",
       };
 
-      await service.create(userObj);
+      const id = await service.create(userObj);
 
-      const user = await db.select().from("users").where({ id: 1 });
+      const user = await db.select().from("users").where({ id });
 
       const expectedPassword = hashPassword(userObj.password);
 
@@ -74,6 +74,18 @@ describe("Testing UserService", () => {
       expect(user[0].name).toStrictEqual("lopes");
       expect(user[0].email).toStrictEqual("test@mail.com");
       expect(user[0].password).toStrictEqual(expectedPassword);
+    });
+
+    it("Should throw an error if email already exists in the database", async () => {
+      const userObj = {
+        name: "lopes2",
+        email: "test@mail.com",
+        password: "test1234",
+      };
+
+      const promise = service.create(userObj);
+
+      expect(promise).rejects.toThrow();
     });
   });
 });
