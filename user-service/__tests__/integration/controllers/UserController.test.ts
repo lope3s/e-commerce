@@ -6,14 +6,15 @@ import knex from "knex";
 import { KnexConfig } from "../../../src/types/generics/KnexConfig";
 
 describe("Testing UserController", () => {
-  const appURI = `http://localhost:${process.env["APP_PORT"]}`;
+  const testPort = 10000;
+  const appURI = `http://localhost:${testPort}`;
   let serverInstance: Server | undefined;
   const dbConfig = knexConfig as KnexConfig;
   const db = knex(dbConfig.test);
 
   beforeAll(async () => {
     await db.migrate.latest();
-    serverInstance = server.listen(process.env["APP_PORT"]);
+    serverInstance = server.listen(testPort);
   });
 
   afterAll(async () => {
@@ -125,6 +126,84 @@ describe("Testing UserController", () => {
           "application/json"
         );
         expect(error.response.status).toEqual(409);
+      }
+    });
+  });
+
+  describe("Creating login route", () => {
+    it("Should return a status 400 if no email is provided", async () => {
+      const userObj = {
+        password: "test1234",
+      };
+
+      try {
+        await axios.post(`${appURI}/login`, userObj);
+
+        throw new Error("Should have received a status 400");
+      } catch (error: any) {
+        expect(error.response.data).toStrictEqual({
+          error: "No e-mail provided",
+        });
+        expect(error.config.headers["Content-Type"]).toContain(
+          "application/json"
+        );
+        expect(error.response.status).toEqual(400);
+      }
+    });
+
+    it("Should return a status 400 if no password is provided", async () => {
+      const userObj = {
+        email: "test@mail.com",
+      };
+
+      try {
+        await axios.post(`${appURI}/login`, userObj);
+
+        throw new Error("Should have received a status 400");
+      } catch (error: any) {
+        expect(error.response.data).toStrictEqual({
+          error: "No password provided",
+        });
+        expect(error.config.headers["Content-Type"]).toContain(
+          "application/json"
+        );
+        expect(error.response.status).toEqual(400);
+      }
+    });
+
+    it("Should return a status 400 if credentials are invalid", async () => {
+      const userObj = {
+        email: "doesntExist@mail.com",
+        password: "wrong",
+      };
+
+      try {
+        await axios.post(`${appURI}/login`, userObj);
+
+        throw new Error("Should have received a status 400");
+      } catch (error: any) {
+        expect(error.response.data).toStrictEqual({
+          error: "Invalid credentials",
+        });
+        expect(error.config.headers["Content-Type"]).toContain(
+          "application/json"
+        );
+        expect(error.response.status).toEqual(400);
+      }
+    });
+
+    it("Should receive an access token if the provided credentiasl are correct", async () => {
+      const userObj = {
+        email: "test@mail.com",
+        password: "test1234",
+      };
+
+      try {
+        const response = await axios.post(`${appURI}/login`, userObj);
+
+        expect(response.data).toHaveProperty("token");
+      } catch (error) {
+        console.log(error);
       }
     });
   });

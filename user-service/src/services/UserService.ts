@@ -6,6 +6,8 @@ import {
   UserServiceError,
   UserServiceErrorCodes,
 } from "../types/errors/UserService";
+import { Login } from "../types/generics/Login";
+import signJWT from "../utils/signJWT";
 
 class UserService {
   db: Knex;
@@ -18,19 +20,19 @@ class UserService {
     if (!userObj.name)
       throw new UserServiceError(
         "Missing name",
-        UserServiceErrorCodes.MISSING_FIELD
+        UserServiceErrorCodes.BAD_REQUEST
       );
 
     if (!userObj.email)
       throw new UserServiceError(
         "Missing email",
-        UserServiceErrorCodes.MISSING_FIELD
+        UserServiceErrorCodes.BAD_REQUEST
       );
 
     if (!userObj.password)
       throw new UserServiceError(
         "Missing password",
-        UserServiceErrorCodes.MISSING_FIELD
+        UserServiceErrorCodes.BAD_REQUEST
       );
 
     const hashedPassword = hashPassword(userObj.password);
@@ -55,6 +57,25 @@ class UserService {
     );
 
     return id;
+  }
+
+  async login(loginObj: Login): Promise<{ token: string }> {
+    const hashedPassword = hashPassword(loginObj.password);
+
+    const user = await this.db
+      .select("id", "name", "email")
+      .from("users")
+      .where({ email: loginObj.email, password: hashedPassword });
+
+    if (!user.length)
+      throw new UserServiceError(
+        "Invalid credentials",
+        UserServiceErrorCodes.BAD_REQUEST
+      );
+
+    const token = signJWT(user[0]);
+
+    return { token };
   }
 }
 

@@ -2,6 +2,7 @@ import UserService from "../../../src/services/UserService";
 import * as knexConfig from "../../../knexfile";
 import knex from "knex";
 import hashPassword from "../../../src/utils/hashPassword";
+import verifyJWT from "../../../src/utils/verifyJWT";
 import { KnexConfig } from "../../../src/types/generics/KnexConfig";
 
 describe("Testing UserService", () => {
@@ -86,6 +87,50 @@ describe("Testing UserService", () => {
       const promise = service.create(userObj);
 
       expect(promise).rejects.toThrow();
+    });
+  });
+
+  describe("Testing login method", () => {
+    it("Should throw a invalid credential error if email doesn't exists in the database", async () => {
+      const loginObj = {
+        email: "doesntexist@mail.com",
+        password: "test1234",
+      };
+
+      const promise = service.login(loginObj);
+
+      expect(promise).rejects.toThrow();
+    });
+
+    it("Should throw a invalid credential error if password doens't match", async () => {
+      const loginObj = {
+        email: "test@mail.com",
+        password: "wrongPassword",
+      };
+
+      const promise = service.login(loginObj);
+
+      expect(promise).rejects.toThrow();
+    });
+
+    it("Should return a token if the email and password are right", async () => {
+      const loginObj = {
+        email: "test@mail.com",
+        password: "test1234",
+      };
+
+      const token = await service.login(loginObj);
+
+      const isTokenValid = verifyJWT(token.token);
+
+      const expectedTokenUserPayload = {
+        id: 1,
+        name: "lopes",
+        email: "test@mail.com",
+      };
+
+      expect(token).toHaveProperty("token");
+      expect(isTokenValid).toMatchObject(expectedTokenUserPayload);
     });
   });
 });

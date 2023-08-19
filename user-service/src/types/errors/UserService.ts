@@ -9,6 +9,6 @@ export class UserServiceError extends Error {
 }
 
 export enum UserServiceErrorCodes {
-  MISSING_FIELD = 400,
+  BAD_REQUEST = 400,
   DUPLICATED_DATA = 409,
 }
