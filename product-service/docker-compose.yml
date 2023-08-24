@@ -1,0 +1,12 @@
+version: "3.3"
+services:
+  pg:
+    image: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=product_service
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=product1234
