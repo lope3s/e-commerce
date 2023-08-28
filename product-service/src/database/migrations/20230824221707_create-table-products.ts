@@ -2,12 +2,12 @@ import { Knex } from "knex";
 
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable("products", (table) => {
-    table.increments("id");
-    table.string("title");
-    table.double("price");
-    table.text("description");
-    table.string("category");
-    table.string("image");
+    table.increments("id").notNullable();
+    table.string("title").notNullable();
+    table.double("price").notNullable();
+    table.text("description").notNullable();
+    table.string("category").notNullable();
+    table.string("image").notNullable();
   });
 }
 
