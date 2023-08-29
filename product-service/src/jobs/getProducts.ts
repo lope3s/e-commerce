@@ -3,13 +3,26 @@ import ProductsService from "../services/Products";
 import { Product } from "../types/entities/Product";
 
 async function getProducts(fakeAPIURL: string) {
-  const { data } = await axios.get<Product[]>(fakeAPIURL);
-
   const pService = new ProductsService();
 
-  await pService.bulkCreate(data);
+  const productList = await pService.listProducts();
 
-  return data;
+  if (productList.length) return [];
+
+  const { data } = await axios.get<Product[]>(fakeAPIURL);
+
+  const productsWithoutRating = data.map((data) => ({
+    id: data.id,
+    title: data.title,
+    price: data.price,
+    description: data.description,
+    category: data.category,
+    image: data.image,
+  }));
+
+  await pService.bulkCreate(productsWithoutRating);
+
+  return productsWithoutRating;
 }
 
 export default getProducts;

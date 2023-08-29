@@ -4,53 +4,54 @@ import ProductService from "../../../src/services/Products";
 import { Product } from "../../../src/types/entities/Product";
 
 describe("Testing Product Service", () => {
-  const db = knex(knexConfig[process.env["NODE_ENV"] || "test"]);
+  const config = knexConfig as { [key: string]: any };
+  const db = knex(config[process.env["NODE_ENV"] || "test"]);
 
   const pService = new ProductService();
 
-  beforeAll(async () => {
-    await db.migrate.latest();
+  afterEach(async () => {
+    await db.delete().from("products");
   });
 
   afterAll(async () => {
-    await db.migrate.rollback();
+    await db.delete().from("products");
     await db.destroy();
   });
 
+  const payload = [
+    {
+      id: 1,
+      title: "test",
+      price: 20.0,
+      description: "test",
+      category: "test",
+      image: "test",
+    },
+    {
+      id: 2,
+      title: "test",
+      price: 20.0,
+      description: "test",
+      category: "test",
+      image: "test",
+    },
+  ];
+
   describe("Testing bulk insert method", () => {
-    //it("Should not insert the payload if missing data", async () => {
-    //  const missingDataPyld: any[] = [
-    //    {
-    //      id: 1,
-    //      title: "test",
-    //    },
-    //  ];
-
-    //  const creatingPromise = pService.bulkCreate(missingDataPyld);
-
-    //  expect(creatingPromise).rejects.toThrow();
-    //});
-
-    it("Should create the register properly if payload is ok", async () => {
-      const payload = [
+    it("Should not insert the payload if missing data", async () => {
+      const missingDataPyld: any[] = [
         {
           id: 1,
           title: "test",
-          price: 20.0,
-          description: "test",
-          category: "test",
-          image: "test",
-        },
-        {
-          id: 2,
-          title: "test",
-          price: 20.0,
-          description: "test",
-          category: "test",
-          image: "test",
         },
       ];
 
+      const creatingPromise = pService.bulkCreate(missingDataPyld);
+
+      expect(creatingPromise).rejects.toThrow();
+    });
+
+    it("Should create the register properly if payload is ok", async () => {
       const insertedCount = await pService.bulkCreate(payload);
 
       expect(insertedCount).toStrictEqual([2]);
@@ -58,6 +59,22 @@ describe("Testing Product Service", () => {
       const productsTable = await db.select().from<Product>("products");
 
       expect(productsTable).toEqual(payload);
+    });
+  });
+
+  describe("Testing listProducts method", () => {
+    it("Should return all the registered products", async () => {
+      await db("products").insert(payload);
+
+      const productsList = await pService.listProducts();
+
+      expect(payload).toEqual(productsList);
+    });
+
+    it("Should return an empty array if no product is found", async () => {
+      const productsList = await pService.listProducts();
+
+      expect([]).toEqual(productsList);
     });
   });
 });

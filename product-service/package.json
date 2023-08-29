@@ -7,7 +7,9 @@
     "start": "npx nodemon ./src/server.ts",
     "test": "export NODE_ENV=test && npx jest",
     "test:unit": "export NODE_ENV=test && npx jest ./__tests__/unit",
-    "test:integration": "export NODE_ENV=test && npx jest ./__tests__/integration"
+    "pretest:integration": "export NODE_ENV=test && npx knex migrate:latest",
+    "test:integration": "export NODE_ENV=test && npx jest ./__tests__/integration",
+    "posttest:integration": "export NODE_ENV=test && npx knex migrate:rollback"
   },
   "keywords": [],
   "author": "",
