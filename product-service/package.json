@@ -9,7 +9,7 @@
     "test:unit": "export NODE_ENV=test && npx jest ./__tests__/unit",
     "pretest:integration": "export NODE_ENV=test && npx knex migrate:latest",
     "test:integration": "export NODE_ENV=test && npx jest ./__tests__/integration",
-    "posttest:integration": "export NODE_ENV=test && npx knex migrate:rollback"
+    "posttest:integration": "export NODE_ENV=test && npx knex migrate:rollback && rm tests_db.sqlite3"
   },
   "keywords": [],
   "author": "",

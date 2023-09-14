@@ -1,12 +1,12 @@
 import "dotenv/config";
 import express from "express";
 
-import getProducts from "./jobs/getProducts";
+import routes from "./routes";
 
 const app = express();
 
 app.use(express.json());
 
-getProducts(process.env["FAKE_STORE_API"] || "");
+app.use(routes)
 
 export default app;

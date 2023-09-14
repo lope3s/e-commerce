@@ -10,12 +10,8 @@ describe("Testing ProductsController", () => {
 
   const db = knex(config["test"]);
 
-  beforeAll(() => {
-    server = app.listen(10002);
-  });
-
-  afterEach(async () => {
-    await db.delete().from("products");
+  beforeAll(async () => {
+      server = app.listen(10002);
   });
 
   afterAll(async () => {
@@ -25,13 +21,13 @@ describe("Testing ProductsController", () => {
 
   it("Should return a status 200 and the products from the database in the response body", async () => {
     try {
-      const data = await axios.get("http://127.0.0.1:10001/products");
+      const data = await axios.get("http://127.0.0.1:10002/products");
 
       const productsList = await db.select().from("products");
 
       expect(data.data).toEqual(productsList);
-      expect(data.config.headers["Content-Type"]).toStrictEqual(
-        "application/json"
+      expect(data.headers["content-type"]).toStrictEqual(
+        "application/json; charset=utf-8"
       );
       expect(data.status).toEqual(200);
     } catch (error: any) {

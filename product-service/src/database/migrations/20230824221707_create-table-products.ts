@@ -8,6 +8,7 @@ export async function up(knex: Knex): Promise<void> {
     table.text("description").notNullable();
     table.string("category").notNullable();
     table.string("image").notNullable();
+    table.integer("stock").notNullable().defaultTo(0);
   });
 }
 
