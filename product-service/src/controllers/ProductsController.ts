@@ -8,7 +8,7 @@ class ProductsController {
         const db = knex(config[process.env["NODE_ENV"] || "development"])
 
         try {
-           const data = await db.select().from("products") 
+           const data = await db.select().from("products").where("stock", ">", 0)
 
            return res.status(200).json(data)
         } catch (error: any) {
