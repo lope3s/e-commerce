@@ -1,0 +1,9 @@
+version: "3.3"
+services:
+  queue:
+    image: rabbitmq
+    ports:
+      - "5672:5672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=ecommerce
+      - RABBITMQ_DEFAULT_PASS=ecommerce1234
