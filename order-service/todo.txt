@@ -1,5 +1,0 @@
-[] - create order
-     Should send a notification to the notification queue, should also fetch the cart api to update the cart and fetch the product api to update the product stock
-[x] - service to fetch cart api
-[x] - service to fetch product api
-[] - Notification Queue service

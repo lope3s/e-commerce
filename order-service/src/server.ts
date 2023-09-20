@@ -1,3 +1,5 @@
-import testQueue from "./app"
+import app from "./app";
 
-testQueue()
+app.listen(process.env["PORT"], () => {
+    console.log("Server is running on port:", process.env["PORT"])
+})
