@@ -7,7 +7,8 @@
     "start": "npx nodemon ./src/index.ts",
     "test": "export NODE_ENV=test && npx jest ./__tests__ --watch",
     "test:integration": "export NODE_ENV=test && npx jest ./__tests__/integration --watch",
-    "test:unit": "npx jest ./__tests__/unit/ --watch"
+    "test:unit": "npx jest ./__tests__/unit/ --watch",
+    "migrations": "npx knex migrate:latest"
   },
   "keywords": [],
   "author": "",

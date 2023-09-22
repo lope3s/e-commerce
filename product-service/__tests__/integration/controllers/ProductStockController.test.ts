@@ -70,7 +70,7 @@ describe("Testing drop stock route", () => {
         const data = await axios.put(SERVER_URL + "/1", payload) 
         
         expect(data.status).toBe(200)
-        expect(data.headers["content-type"]).toStrictEqual("application/json")
+        expect(data.headers["content-type"]).toContain("application/json")
            
         const [product1] = await db.select().from("products").where({id: 1})
 
@@ -83,7 +83,7 @@ describe("Testing drop stock route", () => {
         const data = await axios.put(SERVER_URL + "/1", payload)
 
         expect(data.status).toBe(200)
-        expect(data.headers["content-type"]).toStrictEqual("application/json")
+        expect(data.headers["content-type"]).toContain("application/json")
 
         const [product1] = await db.select().from("products").where({id: 1})
 

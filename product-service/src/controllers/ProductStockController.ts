@@ -19,16 +19,17 @@ class ProductStockController {
                return res.status(404).json({error: "Product not found."})
            }
 
-           if (product.stock - req.body.quantity < 0) {
-               return res.status(400).json({error: "Can't drop the stock below 0"})
-           }
-
            if (req.body.mode === "drop") {
-               await db("products").update("stock", "-", req.body.quantity).where({id: req.params.productID})
+
+               if (product.stock - req.body.quantity < 0) {
+                   return res.status(400).json({error: "Can't drop the stock below 0"})
+               }
+
+               await db.raw("UPDATE products SET stock = stock - ?", req.body.quantity)
                return res.status(200).json({success: "Product updated successfully"})
            }
 
-           await db("products").update("stock", "+", req.body.quantity).where({id: req.params.productID})
+           await db.raw("UPDATE products SET stock = stock + ?", req.body.quantity)
            return res.status(200).json({success: "Product updated successfully"})
         } catch (error: any) {
            console.log(error)

@@ -10,9 +10,11 @@ async function logging() {
 
     channel.consume(QUEUE, (msg) => {
         if (msg) {
-        console.log(msg.content.toString())
+            console.log(msg.content.toString())
         }
-    })
+    }, {noAck: true})
+
+    return {chan: channel, con: connection}
 }
 
 export default logging

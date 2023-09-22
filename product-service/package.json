@@ -5,11 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "npx nodemon ./src/server.ts",
+    "pretest": "export NODE_ENV=test && npx knex migrate:latest",
     "test": "export NODE_ENV=test && npx jest",
-    "test:unit": "export NODE_ENV=test && npx jest ./__tests__/unit",
-    "pretest:integration": "export NODE_ENV=test && npx knex migrate:latest",
-    "test:integration": "export NODE_ENV=test && npx jest ./__tests__/integration",
-    "posttest:integration": "export NODE_ENV=test && npx knex migrate:rollback && rm tests_db.sqlite3"
+    "posttest": "export NODE_ENV=test && npx knex migrate:rollback && rm tests_db.sqlite3",
+    "migrations": "npx knex migrate:latest"
   },
   "keywords": [],
   "author": "",

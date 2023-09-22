@@ -32,18 +32,29 @@ describe("Testing logging function", () => {
         }) as BindedOriginalStdoutWrite
     })
 
+    afterAll(async() => {
+        if (channel && connection) {
+            await channel.close()
+            await connection.close()
+        }
+    })
+
     it("Should consume data from the queue and log it to the sistem stdout", async() => {
         if (channel) {
 
             const payload = {
-                        message: "Notify",
-                        status: "ok"
+              message: "Notify",
+              status: "ok"
             }
 
             channel.sendToQueue(QUEUE, Buffer.from(JSON.stringify(payload)))
-            await logging()
+            const {chan, con} = await logging()
 
-            expect(stdoutOutput).toStrictEqual('"{"message":"Notiy","status":"ok"}"')
+            await new Promise(resolve => setTimeout(() => resolve(null), 1000))
+
+            expect(stdoutOutput).toContain('{"message":"Notify","status":"ok"}')
+            await chan.close()
+            await con.close()
             return
         }
 

@@ -7,7 +7,8 @@
     "start": "npx nodemon ./src/server.ts",
     "test:unit": "npx jest ./__tests__/unit",
     "test:integration": "export NODE_ENV=test && npx jest ./__tests__/integration",
-    "posttest:integration": "rm test.sqlite3"
+    "posttest:integration": "rm test.sqlite3",
+    "migrations": "npx knex migrate:latest"
   },
   "keywords": [],
   "author": "",
